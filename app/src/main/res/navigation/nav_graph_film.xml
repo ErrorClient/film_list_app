@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_film"
+    app:startDestination="@id/filmListFragment">
+
+    <dialog
+        android:id="@+id/filmDialogFragment"
+        android:name="com.errorclient.filmlist.presentation.ui.FilmDialogFragment"
+        android:label="fragment_film_dialog"
+        tools:layout="@layout/fragment_film_dialog" >
+        <argument
+            android:name="filmName"
+            app:argType="string"
+            android:defaultValue="Name" />
+    </dialog>
+    <fragment
+        android:id="@+id/filmListFragment"
+        android:name="com.errorclient.filmlist.presentation.ui.FilmListFragment"
+        android:label="fragment_filmlist"
+        tools:layout="@layout/fragment_filmlist" >
+        <action
+            android:id="@+id/action_filmListFragment_to_filmDialogFragment"
+            app:destination="@id/filmDialogFragment" />
+        <action
+            android:id="@+id/action_filmListFragment_to_errorFragment"
+            app:destination="@id/errorFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/errorFragment"
+        android:name="com.errorclient.filmlist.presentation.ui.ErrorFragment"
+        android:label="fragment_internet"
+        tools:layout="@layout/fragment_error" >
+        <action
+            android:id="@+id/action_errorFragment_to_filmListFragment"
+            app:destination="@id/filmListFragment" />
+    </fragment>
+</navigation>

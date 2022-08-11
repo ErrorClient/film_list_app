@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Нажми на фильм</string>
+    <string name="loading">Loading…</string>
+    <string name="no_film">Кина не будет</string>
+    <string name="try_again">Попробуй ещё раз</string>
+    <string name="format_film_name">Фильм \"%1$s\" был нажат</string>
+</resources>
