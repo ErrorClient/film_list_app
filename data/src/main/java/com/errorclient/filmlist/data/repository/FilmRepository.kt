@@ -13,9 +13,7 @@ import com.errorclient.filmlist.data.repository.usecase.InternetAvailable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.runBlocking
 import java.lang.IllegalStateException
-import java.util.concurrent.Executors
 
 private const val DATABASE_NAME = "film_database"
 
@@ -29,12 +27,11 @@ class FilmRepository(private val context: Context) {
         ).build()
 
     private val filmDao = database.filmDao()
-    private val executor = Executors.newSingleThreadExecutor()
 
     private val _status = MutableStateFlow<StatusLoading>(StatusLoading.Start)
     val status = _status.asStateFlow()
 
-    fun getInternetStatus() : Boolean = InternetAvailable(context).execute()
+    fun getInternetStatus(): Boolean = InternetAvailable(context).execute()
 
     fun setStatus(newStatus: StatusLoading) {
         _status.value = newStatus
@@ -42,71 +39,66 @@ class FilmRepository(private val context: Context) {
 
     fun getAllFilms(): Flow<List<FilmWithActorsDataModel>> = filmDao.getAllFilms()
 
-    fun addFilm() {
+    suspend fun addFilm() {
 
-        if ( !getInternetStatus() ) {
+        if (!getInternetStatus()) {
             setStatus(StatusLoading.Error)
             return
         }
 
         if (_status.value != StatusLoading.Loading) {
+            /***
+             * Старт загрузки
+             */
+            setStatus(StatusLoading.Loading)
 
-            executor.execute {
-                runBlocking {
+            try {
+                val response = RetrofitInstance.filmSearchApi.getFilmList()
+
+                if (response.isSuccessful) {
+
                     /***
-                     * Старт загрузки
+                     * Берем список всех фильмов в ответе.
+                     * Для каждого фильма:
+                     * парсим и добавляем в БД
                      */
-                    setStatus(StatusLoading.Loading)
+                    val filmListApi = response.body()?.items ?: listOf()
 
-                    try {
-                        val response = RetrofitInstance.filmSearchApi.getFilmList()
+                    for (filmApi in filmListApi) {
 
-                        if (response.isSuccessful) {
+                        val film = FilmApiToFilmDataModel(filmApi).execute()
 
-                            /***
-                             * Берем список всех фильмов в ответе.
-                             * Для каждого фильма:
-                             * парсим и добавляем в БД
-                             */
-                            val filmListApi = response.body()?.items ?: listOf()
+                        filmDao.addFilm(film)
 
-                            for (filmApi in filmListApi) {
+                        /***
+                         * Берем список всех актеров для рассматриваемого фильма.
+                         * Для каждого актера:
+                         * парсим
+                         * добавляем в БД актера и связь с фильмом
+                         */
+                        val actorsListApi = filmApi.actors
 
-                                val film = FilmApiToFilmDataModel(filmApi).execute()
+                        for (actorApi in actorsListApi) {
 
-                                filmDao.addFilm(film)
+                            val actor = ActorApiToActorsDataModel(actorApi).execute()
+                            val connection = ActorFilmDataModel(film.title, actor.actorName)
 
-                                /***
-                                 * Берем список всех актеров для рассматриваемого фильма.
-                                 * Для каждого актера:
-                                 * парсим
-                                 * добавляем в БД актера и связь с фильмом
-                                 */
-                                val actorsListApi = filmApi.actors
-
-                                for (actorApi in actorsListApi) {
-
-                                    val actor = ActorApiToActorsDataModel(actorApi).execute()
-                                    val connection = ActorFilmDataModel(film.title, actor.actorName)
-
-                                    filmDao.addActor(actor)
-                                    filmDao.addConnection(connection)
-                                }
-                            }
+                            filmDao.addActor(actor)
+                            filmDao.addConnection(connection)
                         }
-
-                        /***
-                         * Загрузка успешно завершилась
-                         */
-                        setStatus(StatusLoading.Success)
-
-                    } catch (t: Throwable) {
-                        /***
-                         * Загрузка завершилась с ошибкой
-                         */
-                        setStatus(StatusLoading.Error)
                     }
                 }
+
+                /***
+                 * Загрузка успешно завершилась
+                 */
+                setStatus(StatusLoading.Success)
+
+            } catch (t: Throwable) {
+                /***
+                 * Загрузка завершилась с ошибкой
+                 */
+                setStatus(StatusLoading.Error)
             }
         }
     }
