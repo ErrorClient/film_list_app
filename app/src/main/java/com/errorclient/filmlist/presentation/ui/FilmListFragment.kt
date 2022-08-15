@@ -21,7 +21,8 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class FilmListFragment : Fragment() {
 
-    private lateinit var binding: FragmentFilmlistBinding
+    private var _binding: FragmentFilmlistBinding? = null
+    private val binding get() = _binding!!
     private lateinit var recyclerView: RecyclerView
     private lateinit var filmAdapter: FilmAdapter
     private val filmViewModel: FilmViewModel by viewModels()
@@ -32,7 +33,7 @@ class FilmListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        binding = FragmentFilmlistBinding.inflate(inflater, container, false)
+        _binding = FragmentFilmlistBinding.inflate(inflater, container, false)
 
         /***
          * ActionBar показываем только на FilmListFragment
@@ -50,7 +51,7 @@ class FilmListFragment : Fragment() {
          * Запоминаем скролл.
          */
         filmAdapter =
-            FilmAdapter(emptyList()).apply {
+            FilmAdapter(emptyList(), requireActivity()).apply {
                 onClickListener = { film ->
                     val action =
                         FilmListFragmentDirections
@@ -119,5 +120,10 @@ class FilmListFragment : Fragment() {
         view?.post {
             binding.progressBar.isVisible = isVisible
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

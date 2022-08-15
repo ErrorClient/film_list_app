@@ -1,5 +1,6 @@
 package com.errorclient.filmlist.presentation.ui
 
+import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +10,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.errorclient.filmlist.R
 import com.errorclient.filmlist.data.database.models.FilmWithActorsDataModel
 
-class FilmAdapter(private var filmList: List<FilmWithActorsDataModel>) :
+class FilmAdapter(
+    private var filmList: List<FilmWithActorsDataModel>,
+    private var activity: Activity
+    ) :
     RecyclerView.Adapter<FilmAdapter.ViewHolder>() {
 
     /***
@@ -66,7 +70,12 @@ class FilmAdapter(private var filmList: List<FilmWithActorsDataModel>) :
          * заполняем информацию во вьюхолдере
          */
         "$title ($year)".also { viewHolder.nameYearFilm.text = it }
-        viewHolder.directorName.text = directorName
+
+        val nameList = directorName.split(" ")
+        viewHolder.directorName.text =
+            activity.resources.getString(R.string.format_director_name)
+                .format(nameList[2], nameList[0].substring(0,1), nameList[1].substring(0,1))
+
         viewHolder.actors.text = actors
     }
 

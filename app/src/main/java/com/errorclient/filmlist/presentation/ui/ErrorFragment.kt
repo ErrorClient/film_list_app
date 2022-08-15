@@ -17,7 +17,9 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class ErrorFragment : Fragment() {
 
-    private lateinit var binding: FragmentErrorBinding
+    private var _binding: FragmentErrorBinding? = null
+    private val binding get() = _binding!!
+
     private val errorViewModel: ErrorViewModel by viewModels()
 
     override fun onCreateView(
@@ -26,7 +28,7 @@ class ErrorFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        binding = FragmentErrorBinding.inflate(layoutInflater, container, false)
+        _binding = FragmentErrorBinding.inflate(layoutInflater, container, false)
 
         return binding.root
     }
@@ -47,5 +49,10 @@ class ErrorFragment : Fragment() {
                 findNavController().navigate(R.id.action_errorFragment_to_filmListFragment)
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
