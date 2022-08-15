@@ -12,9 +12,11 @@ import com.errorclient.filmlist.data.database.models.FilmWithActorsDataModel
 
 class FilmAdapter(
     private var filmList: List<FilmWithActorsDataModel>,
-    private var activity: Activity
+    activity: Activity
     ) :
     RecyclerView.Adapter<FilmAdapter.ViewHolder>() {
+
+    private val resources = activity.resources
 
     /***
      * Создаем свой ClickListener для работы с item по клику из фрагмента
@@ -56,24 +58,25 @@ class FilmAdapter(
          * парсим данные из списка актеров для текущего фильма
          */
         val actorsModel = filmList[position].actors
-        val listActor = mutableListOf<String>()
-        actorsModel.forEach { listActor.add(it.actorName) }
+        val listActor = actorsModel.map { it.actorName }
 
         /***
          * добавляем указатель на актера
          * собираем актеров в желаемом формате
          */
-        val pointer = "☛ "
+        val pointer = resources.getString(R.string.pointer)
         val actors = pointer + listActor.joinToString(separator = "\n" + pointer)
 
         /***
          * заполняем информацию во вьюхолдере
          */
-        "$title ($year)".also { viewHolder.nameYearFilm.text = it }
+        viewHolder.nameYearFilm.text =
+            resources.getString(R.string.format_film_year)
+                .format(title, year)
 
         val nameList = directorName.split(" ")
         viewHolder.directorName.text =
-            activity.resources.getString(R.string.format_director_name)
+            resources.getString(R.string.format_director_name)
                 .format(nameList[2], nameList[0].substring(0,1), nameList[1].substring(0,1))
 
         viewHolder.actors.text = actors

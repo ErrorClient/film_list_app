@@ -5,4 +5,6 @@
     <string name="try_again">Попробуй ещё раз</string>
     <string name="format_film_name">Фильм \"%1$s\" был нажат</string>
     <string name="format_director_name">%1$s %2$s. %3$s.</string>
+    <string name="pointer">☛ </string>
+    <string name="format_film_year">%1$s (%2$s)</string>
 </resources>
