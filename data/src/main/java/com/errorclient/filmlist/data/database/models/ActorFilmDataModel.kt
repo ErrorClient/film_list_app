@@ -10,7 +10,7 @@ import androidx.room.Entity
     tableName = "film_actor",
     primaryKeys = ["film_id", "actor_id"]
 )
-internal data class ActorFilmDataModel(
+data class ActorFilmDataModel(
 
     @ColumnInfo(name = "film_id")
     val filmId: String,

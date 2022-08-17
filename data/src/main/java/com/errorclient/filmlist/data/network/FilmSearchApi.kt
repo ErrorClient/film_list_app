@@ -6,6 +6,6 @@ import retrofit2.http.GET
 
 internal interface FilmSearchApi {
 
-    @GET("/constanta-android-dev/intership-wellcome-task/main/films.json")
+    @GET("films.json")
     suspend fun getFilmList(): Response<FilmListDataModelApi>
 }

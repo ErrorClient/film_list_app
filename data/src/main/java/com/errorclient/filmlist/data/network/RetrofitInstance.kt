@@ -3,11 +3,9 @@ package com.errorclient.filmlist.data.network
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
-private const val BASE_URL = "https://raw.githubusercontent.com"
-
-internal object RetrofitInstance {
+internal class RetrofitInstance(baseUrl: String) {
     private val retrofit = Retrofit.Builder()
-        .baseUrl(BASE_URL)
+        .baseUrl(baseUrl)
         .addConverterFactory(MoshiConverterFactory.create())
         .build()
 

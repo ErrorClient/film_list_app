@@ -5,11 +5,4 @@ import com.errorclient.filmlist.data.repository.FilmRepository
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
-class MyApp: Application() {
-
-    override fun onCreate() {
-        super.onCreate()
-
-        FilmRepository.initialize(applicationContext)
-    }
-}
+class MyApp: Application()

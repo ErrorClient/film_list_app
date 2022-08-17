@@ -1,4 +1,4 @@
-package com.errorclient.filmlist.data.repository.usecase
+package com.errorclient.filmlist.data.filmstorage.usecase
 
 import com.errorclient.filmlist.data.database.models.FilmDataModel
 import com.errorclient.filmlist.data.network.models.FilmDataModelApi

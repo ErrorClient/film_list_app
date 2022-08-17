@@ -1,9 +1,13 @@
 package com.errorclient.filmlist.presentation.di
 
+import android.content.Context
+import com.errorclient.filmlist.data.filmstorage.FilmStorage
+import com.errorclient.filmlist.data.filmstorage.russianfilm.RussianFilmStorage
 import com.errorclient.filmlist.data.repository.FilmRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -13,7 +17,16 @@ class HiltDataModule {
 
     @Provides
     @Singleton
-    fun provideFilmRepository() : FilmRepository {
-        return FilmRepository.get()
+    fun provideFilmRepository(
+        @ApplicationContext context: Context,
+        filmStorage: FilmStorage
+    ): FilmRepository {
+        return FilmRepository(context, filmStorage)
+    }
+
+    @Provides
+    @Singleton
+    fun provideFilmStorage(@ApplicationContext context: Context): FilmStorage {
+        return RussianFilmStorage(context)
     }
 }

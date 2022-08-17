@@ -1,8 +1,8 @@
-package com.errorclient.filmlist.data.repository.models
+package com.errorclient.filmlist.data.filmstorage.usecase
 
 import com.errorclient.filmlist.data.database.models.ActorsDataModel
 import com.errorclient.filmlist.data.network.models.ActorsDataModelApi
-import com.errorclient.filmlist.data.repository.usecase.ActorApiToActorsDataModel
+import com.errorclient.filmlist.data.filmstorage.usecase.ActorApiToActorsDataModel
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
