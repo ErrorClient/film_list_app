@@ -10,20 +10,22 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class FilmRepository(private val context: Context, private val filmStorage: FilmStorage) {
+class FilmRepository(
+    private val context: Context, private val filmStorage: FilmStorage
+    ) : FilmRepositoryInterface {
 
     private val _status = MutableStateFlow<StatusLoading>(StatusLoading.Start)
-    val status = _status.asStateFlow()
+    override val status = _status.asStateFlow()
 
-    fun getInternetStatus(): Boolean = InternetAvailable(context).execute()
+    override fun getInternetStatus(): Boolean = InternetAvailable(context).execute()
 
-    fun setStatus(newStatus: StatusLoading) {
+    override fun setStatus(newStatus: StatusLoading) {
         _status.value = newStatus
     }
 
-    fun getAllFilms(): Flow<List<FilmWithActorsDataModel>> = filmStorage.getAllFilms()
+    override fun getAllFilms(): Flow<List<FilmWithActorsDataModel>> = filmStorage.getAllFilms()
 
-    suspend fun addFilm() {
+    override suspend fun addFilm() {
 
         if (!getInternetStatus()) {
             setStatus(StatusLoading.Error)

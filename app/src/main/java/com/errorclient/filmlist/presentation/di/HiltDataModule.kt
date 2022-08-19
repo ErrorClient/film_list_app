@@ -4,6 +4,7 @@ import android.content.Context
 import com.errorclient.filmlist.data.filmstorage.FilmStorage
 import com.errorclient.filmlist.data.filmstorage.russianfilm.RussianFilmStorage
 import com.errorclient.filmlist.data.repository.FilmRepository
+import com.errorclient.filmlist.data.repository.FilmRepositoryInterface
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,7 +21,7 @@ class HiltDataModule {
     fun provideFilmRepository(
         @ApplicationContext context: Context,
         filmStorage: FilmStorage
-    ): FilmRepository {
+    ): FilmRepositoryInterface {
         return FilmRepository(context, filmStorage)
     }
 
