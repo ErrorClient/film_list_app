@@ -3,7 +3,6 @@ package com.errorclient.filmlist.data.filmstorage.usecase
 import com.errorclient.filmlist.data.database.models.FilmDataModel
 import com.errorclient.filmlist.data.network.models.ActorsDataModelApi
 import com.errorclient.filmlist.data.network.models.FilmDataModelApi
-import com.errorclient.filmlist.data.filmstorage.usecase.FilmApiToFilmDataModel
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
