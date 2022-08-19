@@ -78,12 +78,12 @@ class FilmListFragment : Fragment() {
          * Подписываемся на статус загрузки.
          * Если Start,
          * то, при наличии интернета, грузим данные,
-         * иначе уходим в InternetFragment.
+         * иначе уходим в ErrorFragment.
          * Если Success,
          * то передаем данные в адаптер
          * и скрываем progressBar.
          * Если Error,
-         * то уходим в InternetFragment.
+         * то уходим в ErrorFragment.
          * Если Loading,
          * то показываем progressBar.
          * Иначе - ничего не делаем (на случай нового значения в StatusLoading)
